@@ -1,65 +1,43 @@
+#include "main.h"
 #include <stdarg.h>
 #include <unistd.h>
 
-/**
- * _printf - Custom printf function
- * @format: Format string
- * @...: Variable number of arguments
- *
- * Return: The number of characters printed.
- */
 int _printf(const char *format, ...)
 {
-	int printed_chars = 0;
-	va_list args;
-	char c, *s;
+  int count = 0;
+  va_list args;
 
-	va_start(args, format);
+  va_start(args, format);
 
-	while (format && *format)
-	{
-		if (*format == '%')
-		{
-			format++; /* Move past '%' */
-			switch (*format)
-			{
-				case 'c':
-				{
-					c = va_arg(args, int);
-					write(1, &c, 1);
-					printed_chars++;
-					break;
-				}
-				case 's':
-				{
-					s = va_arg(args, char *);
-					while (*s)
-					{
-						write(1, s, 1);
-						s++;
-						printed_chars++;
-					}
-					break;
-				}
-				case '%':
-					write(1, "%", 1);
-					printed_chars++;
-					break;
-				default:
-					/* Handle unknown format specifiers (you can extend this) */
-					write(1, "%", 1);
-					write(1, format, 1);
-					printed_chars = printed_chars + 2;
-					break;
-			}
-		}
-		else
-		{
-			write(1, format, 1);
-			printed_chars++;
-		}
-		format++;
-	}
-	va_end(args);
-	return (printed_chars);
+  while (*format != '\0') {
+    if (*format == '%') {
+      format++;
+      switch (*format) {
+        case 'c':
+          count += _putchar(va_arg(args, int));
+          break;
+        case 's':
+          count += _puts(va_arg(args, char *));
+          break;
+        case '%':
+          count += _putchar('%');
+          break;
+        case 'p':
+          count += _puts(va_arg(args, void *));
+          break;
+        case 'r':
+          count += _puts(va_arg(args, char *));
+          break;
+        default:
+          break;
+      }
+      format++;
+    } else {
+      count += _putchar(*format);
+      format++;
+    }
+  }
+  va_end(args);
+  return count;
 }
+
