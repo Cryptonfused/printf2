@@ -1,23 +1,22 @@
 #include "main.h"
 #include <unistd.h>
 #include <stdarg.h>
-
 /**
- * _printf - Custom printf function.
- * @format: Format string.
- * @...: Variable number of arguments.
+ * _printf - Custom printf function
+ * @format: Format string
+ * @...: Variable number of arguments
  *
  * Return: The number of characters printed.
  */
+
 int _printf(const char *format, ...)
 {
-	int char_count = 0;
-        va_list args;
+	int charCount = 0;
+	va_list args;
 
 	if (!format || !format[0])
-	{
 		return (-1);
-	}
+
 	va_start(args, format);
 
 	while (format && *format)
@@ -25,37 +24,45 @@ int _printf(const char *format, ...)
 		if (*format == '%')
 		{
 			format++;
-			if (*format == 'c')
+			switch (*format)
 			{
-				char_count += print_character(args);
+				case 'c':
+					charCount += print_character(args);
+					break;
+				case 's':
+					charCount += print_string(args);
+					break;
+				case 'r':
+					write(1, "%", 1);
+					write(1, "r", 1);
+					charCount += 2;
+					break;
+				case '%':
+					write(1, "%", 1);
+					charCount++;
+					break;
+				case 'd':
+				case 'i':
+					/* Handle integers here */
+					break;
+				default:
+					if (*format)
+					{
+						format--;
+						write(1, format, 1);
+						format++;
+					}
+					charCount++;
 			}
-			else if (*format == 's')
-			{
-				char_count += print_string(args);
-			}
-			else if (*format == '%')
-			{
-				write(1, "%", 1);
-				char_count++;
-			}
-			else if (*format == 'd' || *format == 'i')
-			{
-				char_count += print_integer(args);
-			}
-			else
-			{
-				if (*format)
-				{
-					format--;
-					write(1, format, 1);
-					format++;
-				}
-				char_count++;
-			}
+		}
+		else
+		{
+			write(1, format, 1);
+			charCount++;
 		}
 		format++;
 	}
 
 	va_end(args);
-	return (char_count);
+	return (charCount);
 }
