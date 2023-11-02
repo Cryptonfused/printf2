@@ -53,11 +53,6 @@ int _printf(const char *format, ...)
 				char_count++;
 			}
 		}
-		else
-		{
-			write(1, format, 1);
-			char_count++;
-		}
 		format++;
 	}
 
