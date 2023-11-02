@@ -1,6 +1,6 @@
-#include "main.h"
 #include <stdarg.h>
 #include <unistd.h>
+#include "main.h"
 
 int _printf(const char *format, ...)
 {
@@ -19,14 +19,14 @@ int _printf(const char *format, ...)
         case 's':
           count += _puts(va_arg(args, char *));
           break;
+        case 'd':
+          count += _putnbr(va_arg(args, int));
+          break;
+        case 'i':
+          count += _putnbr(va_arg(args, int));
+          break;
         case '%':
           count += _putchar('%');
-          break;
-        case 'p':
-          count += _puts(va_arg(args, void *));
-          break;
-        case 'r':
-          count += _puts(va_arg(args, char *));
           break;
         default:
           break;
@@ -37,7 +37,8 @@ int _printf(const char *format, ...)
       format++;
     }
   }
+
   va_end(args);
+
   return count;
 }
-
