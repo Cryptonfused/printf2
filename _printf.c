@@ -11,58 +11,74 @@
 
 int _printf(const char *format, ...)
 {
-	int charCount = 0;
-	va_list args;
+	int char_count = 0;
+    	va_list args;
+    if (!format || !format[0])
+    {
+        return (-1);
+    }
 
-	if (!format || !format[0])
-		return (-1);
+    va_start(args, format);
 
-	va_start(args, format);
+    while (format && *format)
+    {
+        if (*format == '%')
+        {
+            format++;
+            if (*format)
+            {
+                if (*format == 's')
+                {
+                    char *str = va_arg(args, char *);
+                    if (str == NULL)
+                    {
+                        write(1, "(null)", 6);
+                        char_count += 6;
+                    }
+                    else
+                    {
+                        while (*str)
+                        {
+                            write(1, str, 1);
+                            char_count++;
+                            str++;
+                        }
+                    }
+                }
+                else if (*format == '%')
+                {
+                    write(1, "%", 1);
+                    char_count++;
+                }
+                else if (*format == '!')
+                {
+                    if (*(format - 1) == '%')
+                    {
+                        write(1, "%%!", 3);
+                        char_count += 3;
+                    }
+                }
+                else
+                {
+                    write(1, "%", 1);
+                    char_count++;
+                    while (*format && *format != 'c' && *format != 's' && *format != '%' && *format != 'd' && *format != 'i')
+                    {
+                        write(1, format, 1);
+                        char_count++;
+                        format++;
+                    }
+                }
+            }
+        }
+        else
+        {
+            write(1, format, 1);
+            char_count++;
+        }
+        format++;
+    }
 
-	while (format && *format)
-	{
-		if (*format == '%')
-		{
-			format++;
-			switch (*format)
-			{
-				case 'c':
-					charCount += print_character(args);
-					break;
-				case 's':
-					charCount += print_string(args);
-					break;
-				case 'r':
-					write(1, "%", 1);
-					write(1, "r", 1);
-					charCount += 2;
-					break;
-				case '%':
-					write(1, "%", 1);
-					charCount++;
-					break;
-				case 'd':
-				case 'i':
-					/* Handle integers here */
-					break;
-				default:
-					if (*format)
-					{
-						format--;
-						write(1, format, 1);
-						format++;
-					}
-					charCount++;
-			}
-		}
-		else
-		{
-			write(1, format, 1);
-			charCount++;
-		}
-		format++;
-	}
-
-	va_end(args);
-	return (charCount);
+    va_end(args);
+    return char_count;
 }
