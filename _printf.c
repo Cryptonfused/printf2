@@ -1,6 +1,6 @@
 #include "main.h"
-#include <unistd.h>
 #include <stdarg.h>
+#include <unistd.h>
 
 /**
  * _printf - Custom printf function
@@ -11,53 +11,40 @@
  */
 int _printf(const char *format, ...)
 {
-	int charCount = 0;
-	va_list args;
+    int charCount = 0;
+    va_list args;
 
-	if (!format || !format[0])
-		return (-1);
+    if (!format || !format[0])
+        return (0);
 
-	va_start(args, format);
+    va_start(args, format);
 
-	while (format && *format)
-	{
-		if (*format == '%')
-		{
-			format++;
-			switch (*format)
-			{
-				case 'c':
-					charCount += print_character(args);
-					break;
-				case 's':
-					charCount += print_string(args);
-					break;
-				case '%':
-					write(1, "%", 1);
-					charCount++;
-					break;
-				case 'd':
-				case 'i':
-					/* Handle integers here */
-					break;
-				default:
-					if (*format)
-					{
-						format--;
-						write(1, format, 1);
-						format++;
-					}
-					charCount++;
-			}
-		}
-		else
-		{
-			write(1, format, 1);
-			charCount++;
-		}
-		format++;
-	}
+    while (*format)
+    {
+        if (*format == '%')
+        {
+            format++;
+            if (*format == '%')
+            {
+                write(1, format - 1, 1);
+                charCount++;
+            }
+            else
+            {
+                format--;
+                write(1, format, 2);
+                charCount += 2;
+                format++;
+            }
+        }
+        else
+        {
+            write(1, format, 1);
+            charCount++;
+        }
+        format++;
+    }
 
-	va_end(args);
-	return (charCount);
+    va_end(args);
+    return (charCount);
 }
