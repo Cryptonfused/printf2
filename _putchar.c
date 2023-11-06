@@ -1,8 +1,12 @@
 #include "main.h"
 #include <unistd.h>
-
-int _putchar(int c)
+/**
+ * _putchar - Print a single character to stdout
+ * @c: The character to be printed
+ *
+ * Return: The number of characters printed (1 for success, -1 for failure)
+ */
+int _putchar(char c)
 {
-  write(STDOUT_FILENO, &c, 1);
-  return (1);
+	return (write(1, &c, 1));
 }
