@@ -22,16 +22,20 @@ int _printf(const char *format, ...)
 		{
 			format++;
 			if (*format == '\0')
-			{
-				count += _putchar('%');
 				break;
-			}
 			if (*format == 'c')
 				count += _putchar(va_arg(args, int));
 			else if (*format == 's')
 				count += _print_str(va_arg(args, char *));
 			else if (*format == '%')
 				count += _putchar('%');
+			else if (*format == 'd' || *format == 'i')
+			{
+				int num = va_arg(args, int);
+				if (num < 0)
+					count++;
+				count += _print_num(num);
+			}
 			else
 			{
 				count += _putchar(*(format - 1));
