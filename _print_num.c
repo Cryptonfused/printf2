@@ -9,30 +9,38 @@
  */
 int _print_num(int n)
 {
-	int count = 0;
+	int num, count = 0;
+	int digit, divisor = 1;
 
-	if (n < 0)
+
+	if (n == INT_MIN)
 	{
-		_putchar('-');
-		if (n == INT_MIN)
-		{
-			n = -(n + 1);
-		}
+		count += _putchar('-');
+		n = -(n + 1); /* Handle INT_MIN as a special case */
+	}
+	else if (n < 0)
+	{
+		count += _putchar('-');
+		n = -n;
+	}
+
+	num = n;
+	while (num / divisor >= 10)
+	{
+		divisor *= 10;
+	}
+
+	while (divisor > 0)
+	{
+		digit = num / divisor;
+		if (divisor < 10)
+			_putchar((digit + 1) + '0');
 		else
-		{
-			n = -n;
-		}
+			_putchar(digit + '0');
 		count++;
+		num %= divisor;
+		divisor /= 10;
 	}
-
-	while (n / 10 > 0)
-	{
-		count += _print_num(n / 10);
-		n = n % 10;
-	}
-
-	_putchar(n + '0');
-	count++;
 
 	return (count);
 }
