@@ -1,6 +1,7 @@
 #include "main.h"
 #include <stdarg.h>
 #include <unistd.h>
+#include <limits.h>
 /**
  * _printf - Custom printf function
  * @format: The format string containing format specifiers
@@ -10,43 +11,59 @@
  */
 int _printf(const char *format, ...)
 {
-	int count = 0;
-	va_list args;
+    int count = 0;
+    va_list args;
 
-	va_start(args, format);
-	if (format == NULL)
-        	return (-1);
-	while (*format)
-	{
-		if (*format == '%')
-		{
-			format++;
-			if (*format == '\0')
-				break;
-			if (*format == 'c')
-				count += _putchar(va_arg(args, int));
-			else if (*format == 's')
-				count += _print_str(va_arg(args, char *));
-			else if (*format == '%')
-				count += _putchar('%');
-			else if (*format == 'd' || *format == 'i')
-			{
-				int num = va_arg(args, int);
-				count += _print_num(num);
-			}
-			else
-			{
-				count += _putchar(*(format - 1));
-				count += _putchar(*format);
-			}
-			format++;
-		}
-		else
-		{
-			count += _putchar(*format);
-			format++;
-		}
-	}
-	va_end(args);
-	return (count);
+    va_start(args, format);
+    if (format == NULL)
+        return (-1);
+
+    while (*format)
+    {
+        if (*format == '%')
+        {
+            format++;
+            if (*format == '\0')
+                break;
+
+            if (*format == 'c')
+                count += _putchar(va_arg(args, int));
+            else if (*format == 's')
+                count += _print_str(va_arg(args, char *));
+            else if (*format == '%')
+                count += _putchar('%');
+            else if (*format == 'd' || *format == 'i')
+            {
+                int num = va_arg(args, int);
+
+                if (num == INT_MIN)
+                {
+                    count += _putchar('-');
+                    num = -(num + 1);  /* Handle INT_MIN as a special case */
+                    num++;
+                }
+                else if (num < 0)
+                {
+                    count += _putchar('-');
+                    num = -num;
+                }
+
+                count += _print_num(num);
+            }
+            else
+            {
+                count += _putchar(*(format - 1));
+                count += _putchar(*format);
+            }
+
+            format++;
+        }
+        else
+        {
+            count += _putchar(*format);
+            format++;
+        }
+    }
+    va_end(args);
+    return count;
 }
