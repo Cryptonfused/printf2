@@ -32,8 +32,6 @@ int _printf(const char *format, ...)
 			else if (*format == 'd' || *format == 'i')
 			{
 				int num = va_arg(args, int);
-				if (num < 0)
-					count++;
 				count += _print_num(num);
 			}
 			else
