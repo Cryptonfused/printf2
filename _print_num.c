@@ -9,12 +9,13 @@
  */
 int _print_num(int n)
 {
-	int num, count = 0;
-	int digit, divisor = 1;
+	int mark = 0, count = 0;
+	int num, digit, divisor = 1;
 
 
 	if (n == INT_MIN)
 	{
+		mark = 1;
 		count += _putchar('-');
 		n = -(n + 1); /* Handle INT_MIN as a special case */
 	}
@@ -33,7 +34,7 @@ int _print_num(int n)
 	while (divisor > 0)
 	{
 		digit = num / divisor;
-		if (divisor < 10)
+		if (divisor < 10 && mark == 1)
 			_putchar((digit + 1) + '0');
 		else
 			_putchar(digit + '0');
