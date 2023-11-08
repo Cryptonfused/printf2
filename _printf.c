@@ -1,7 +1,6 @@
 #include "main.h"
 #include <stdarg.h>
 #include <unistd.h>
-#include <limits.h>
 /**
  * _printf - Custom printf function
  * @format: The format string containing format specifiers
@@ -23,7 +22,7 @@ int _printf(const char *format, ...)
 		{
 			format++;
 			if (*format == '\0')
-				break;
+				count += _putchar('%');
 			if (*format == 'c')
 				count += _putchar(va_arg(args, int));
 			else if (*format == 's')
