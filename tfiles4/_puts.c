@@ -1,23 +1,25 @@
 #include "main.h"
-#include <stddef.h>
+#include <unistd.h>
+
 /**
- * _print_str - Print a string to stdout
+ * _puts - Prints a string followed by a newline to stdout
  * @str: The string to be printed
  *
  * Return: The number of characters printed
  */
-int _print_str(char *str)
+int _puts(char *str)
 {
 	int count = 0;
 
-	if (str == NULL)
-	str = "(null)";
-	while (*str)
+	while (*str != '\0')
 	{
 		_putchar(*str);
-		count++;
 		str++;
+		count++;
 	}
+
+	_putchar('\n');
+	count++;
+
 	return (count);
 }
-

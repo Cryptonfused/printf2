@@ -30,6 +30,14 @@ int _printf(const char *format, ...)
                 co++;
                 format++;
             }
+            else if (*format == 'd' || *format == 'i')
+            {
+                int num = va_arg(args, int);
+                if (num < 0)
+                    co++;
+                co += _print_num(num);
+                format++;
+            }
             else /*%string or other character*/
             {
                 if (*format)
