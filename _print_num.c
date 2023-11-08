@@ -27,7 +27,7 @@ int _print_num(int n)
 			n = -n;
 		}
 	}
-	divisor = 10; /* Initialize divisor with 10 */
+	divisor = 1; /* Initialize divisor with 10 */
 	while (n / divisor >= 10)
 	{
 		divisor *= 10;
